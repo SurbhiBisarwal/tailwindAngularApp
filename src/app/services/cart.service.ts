@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Product } from '../models/products.model';
 
 @Injectable({
@@ -6,7 +6,6 @@ import { Product } from '../models/products.model';
 })
 export class CartService {
   cart = signal<Product[]>([]);
-  qty: number = 0;
 
   addToCart(product: Product) {
     if ((product.stock ?? 0) > 0) {
@@ -16,6 +15,7 @@ export class CartService {
       if (existingProduct) {
         // Increase quantity and reduce stock
         existingProduct.qty = (existingProduct.qty ?? 1) + 1;
+        
       } else {
         // Add new product with qty = 1
         currentCart.push({ ...product, qty: 1 });

@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { CartService } from '../../../services/cart.service';
 import { PrimaryButtonComponent } from '../../../components/primary-button/primary-button.component';
+import { ProductCardComponent } from '../../products-list/product-card/product-card.component';
 
 @Component({
   selector: 'app-order-summary',
@@ -19,10 +20,11 @@ import { PrimaryButtonComponent } from '../../../components/primary-button/prima
 })
 export class OrderSummaryComponent {
   cartService = inject(CartService);
+
   total = computed(() => {
     let total = 0;
     for (const item of this.cartService.cart()) {
-      total += item.price;
+      total += item.price * (item.qty ?? 1);
     }
     return total;
   });

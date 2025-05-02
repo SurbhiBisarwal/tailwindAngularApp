@@ -43,6 +43,5 @@ export class ProductsListComponent {
       image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
       stock: 7,
     },
-   
   ]);
 }
