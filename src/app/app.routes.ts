@@ -9,7 +9,7 @@ export const routes: Routes = [
     component: ProductsListComponent,
   },
   {
-    path:'cart',
-    component:CartComponent
-  }
+    path: 'cart',
+    component: CartComponent,
+  },
 ];

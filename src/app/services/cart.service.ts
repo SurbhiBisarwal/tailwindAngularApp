@@ -6,29 +6,48 @@ import { Product } from '../models/products.model';
 })
 export class CartService {
   cart = signal<Product[]>([]);
-  // addToCart(product: Product) {
-  //   this.cart.set([...this.cart(), product]);
-  // }/
+  qty: number = 0;
 
   addToCart(product: Product) {
     if ((product.stock ?? 0) > 0) {
+      const currentCart = this.cart();
+      const existingProduct = currentCart.find((p) => p.id === product.id);
+
+      if (existingProduct) {
+        // Increase quantity and reduce stock
+        existingProduct.qty = (existingProduct.qty ?? 1) + 1;
+      } else {
+        // Add new product with qty = 1
+        currentCart.push({ ...product, qty: 1 });
+      }
+
       product.stock = (product.stock ?? 0) - 1;
-      this.cart.set([...this.cart(), product]);
+
+      this.cart.set([...currentCart]);
     } else {
       console.warn('Product is out of stock');
-      // Optionally show a message to the user
     }
   }
-  removeFromcart(id: number) {
-    // Find the product to update its stock
-    const productToRemove = this.cart().find((p) => p.id === id);
 
-    if (productToRemove) {
-      // Increment the stock by 1 for the removed product
-      productToRemove.stock = (productToRemove.stock ?? 0) + 1;
+  removeFromCart(id: number) {
+    const currentCart = this.cart();
+    const index = currentCart.findIndex((p) => p.id === id);
 
-      // Update the cart after modifying the stock
-      this.cart.set(this.cart().filter((p) => p.id !== id));
+    if (index !== -1) {
+      const product = currentCart[index];
+
+      // Increase stock when removing from cart
+      product.stock = (product.stock ?? 0) + 1;
+
+      if ((product.qty ?? 1) > 1) {
+        // Just reduce the quantity
+        product.qty = (product.qty ?? 1) - 1;
+      } else {
+        // Remove item if qty becomes 0
+        currentCart.splice(index, 1);
+      }
+
+      this.cart.set([...currentCart]);
     }
   }
 

@@ -6,7 +6,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
   imports: [ProductCardComponent],
   template: `<div class="p-8 grid grid-cols-2 gap-4">
     @for(product of products();track product.id){
-   <app-product-card [product]="product "/>
+    <app-product-card [product]="product" />
     }
   </div>`,
   styles: ``,
@@ -43,5 +43,6 @@ export class ProductsListComponent {
       image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
       stock: 7,
     },
+   
   ]);
 }
