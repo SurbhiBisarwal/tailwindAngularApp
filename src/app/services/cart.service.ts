@@ -5,28 +5,32 @@ import { Product } from '../models/products.model';
   providedIn: 'root',
 })
 export class CartService {
-  cart = signal<Product[]>([
-    {
-      id: 1,
-      title: 'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
-      price: 109.95,
-      image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
-      stock: 10,
-    },
-    {
-      id: 2,
-      title: 'Mens Casual Premium Slim Fit T-Shirts ',
-      price: 22.3,
-      image:
-        'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
-      stock: 0,
-    },
-  ]);
+  cart = signal<Product[]>([]);
+  // addToCart(product: Product) {
+  //   this.cart.set([...this.cart(), product]);
+  // }/
+
   addToCart(product: Product) {
-    this.cart.set([...this.cart(), product]);
+    if ((product.stock ?? 0) > 0) {
+      product.stock = (product.stock ?? 0) - 1;
+      this.cart.set([...this.cart(), product]);
+    } else {
+      console.warn('Product is out of stock');
+      // Optionally show a message to the user
+    }
   }
   removeFromcart(id: number) {
-    this.cart.set(this.cart().filter((p) => p.id !== id));
+    // Find the product to update its stock
+    const productToRemove = this.cart().find((p) => p.id === id);
+
+    if (productToRemove) {
+      // Increment the stock by 1 for the removed product
+      productToRemove.stock = (productToRemove.stock ?? 0) + 1;
+
+      // Update the cart after modifying the stock
+      this.cart.set(this.cart().filter((p) => p.id !== id));
+    }
   }
+
   constructor() {}
 }

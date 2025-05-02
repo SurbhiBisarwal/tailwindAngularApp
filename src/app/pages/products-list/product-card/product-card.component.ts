@@ -9,13 +9,16 @@ import { CartService } from '../../../services/cart.service';
     class="bg-white shadow-md border rounded-xl p-6 flex flex-col gap-6 relative "
   >
     <div class="mx-auto">
-      <img [src]="product().image" class="w-[200px] h-[100px] object-contain" />
+      <img
+        [src]="product().image"
+        class=" mx-auto w-[200px] h-[100px] object-contain"
+      />
       <div class="flex flex-col">
         <span class="text-md font-bold">{{ product().title }} </span>
         <span class="text-sm">{{ '$' + product().price }} </span>
         <app-primary-button
           label="Add to cart"
-          class="mt-3"
+          class="mt-3 mx-auto"
           (btnClicked)="cartService.addToCart(product())"
         />
       </div>
